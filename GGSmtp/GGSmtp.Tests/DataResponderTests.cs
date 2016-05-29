@@ -12,7 +12,7 @@ namespace GGSmtp.Tests
     [TestFixture]
     public class DataResponderTests
     {
-        [Test]
+        [Test(Author = "Dor", Description = "Checks the DefaultDataResponder", TestOf = typeof(DefaultDataResponder)]
         public void TestAttachmentSend()
         {
             string[] lines = File.ReadAllLines(@"C:\Temp\Mail\2016-05-15_113132_746.eml");
@@ -34,7 +34,7 @@ namespace GGSmtp.Tests
 
             SmtpResponse response = responder.DataEnd(sessionInfoMock.Object);
 
-            Assert.Equals(response, SmtpResponses.OK);
+            Assert.IsTrue(response.ResponseCode == 250, "Response result is different from OK, something went wrong");
         }
     }
 }

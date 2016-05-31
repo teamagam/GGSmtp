@@ -12,7 +12,7 @@ namespace GGSmtp.Tests
     [TestFixture]
     public class DataResponderTests
     {
-        [Test(Author = "Dor", Description = "Checks the DefaultDataResponder", TestOf = typeof(DefaultDataResponder)]
+        [Test(Author = "Dor", Description = "Checks the DefaultDataResponder", TestOf = typeof(DefaultDataResponder))]
         public void TestAttachmentSend()
         {
             string[] lines = File.ReadAllLines(@"C:\Temp\Mail\2016-05-15_113132_746.eml");

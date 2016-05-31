@@ -13,6 +13,8 @@ namespace GGSmtp
 {
     public class GGSmtpServer : IDisposable
     {
+        #region Members
+
         private short mPort;
         private bool isStopped;
         private bool mDisposedValue;
@@ -20,6 +22,10 @@ namespace GGSmtp
         private PortListener mPortListener;
         private IRespondToSmtpData mReponseHandler;
         private Settings mSettings;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Initializes SMTP server
@@ -66,6 +72,10 @@ namespace GGSmtp
             MailServerLogger.Set(logger);
         }
 
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// Gets the port the server will use.
         /// </summary>
@@ -84,6 +94,10 @@ namespace GGSmtp
         /// Will set how much time the server will send timeout to the client when they're idle.
         /// </summary>
         public TimeSpan? ConnectionIdleTimeout { get; set; }
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// A blocking method to start a server.
@@ -112,6 +126,10 @@ namespace GGSmtp
 
             mPortListener.StopListen();
         }
+
+        #endregion
+
+        #region Private Methods
 
         /// <summary>
         /// Creates a server intance
@@ -147,6 +165,8 @@ namespace GGSmtp
 
             return smtpServer;
         }
+
+        #endregion
 
         #region IDisposable Support (Disposable Pattern)
 

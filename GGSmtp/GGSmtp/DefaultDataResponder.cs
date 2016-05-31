@@ -18,9 +18,15 @@ namespace GGSmtp
 {
     public class DefaultDataResponder : SmtpDataResponder
     {
+        #region Members
+
         private IDictionary<ISmtpSessionInfo, Stream> mSessionsData;
         private IMailServerLogger mLogger;
         private Settings mSettings;
+
+        #endregion
+
+        #region Constructors
 
         public DefaultDataResponder(ISmtpServerConfiguration config) :
             base(config)
@@ -29,6 +35,10 @@ namespace GGSmtp
             mLogger = MailServerLogger.Instance;
             mSettings = Settings.Default;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public override SmtpResponse DataStart(ISmtpSessionInfo sessionInfo)
         {
@@ -60,33 +70,23 @@ namespace GGSmtp
 
         public override SmtpResponse DataEnd(ISmtpSessionInfo sessionInfo)
         {
-            Stream currentStream = mSessionsData[sessionInfo];
-            long streamLength = currentStream.Length;
-            string successMessage = string.Format("{0} bytes received", streamLength);
-
-            // Write a success response to return, but don't return it yet
-            SmtpResponse response = SmtpResponses.OK.CloneAndChange(successMessage);
+            Stream currentStream = null;
 
             try
             {
-                currentStream.Seek(0, SeekOrigin.Begin);
+                // Get the stream by context (ISmtpSessionInfo)
+                currentStream = mSessionsData[sessionInfo];
 
-                // Read the mail message from the stream
-                MimeMessage message = MimeMessage.Load(currentStream);
+                long streamLength = currentStream.Length;
+                string successMessage = string.Format("{0} bytes received", streamLength);
 
-                foreach (MimePart attatchment in message.Attachments)
-                {
-                    mLogger.Debug(string.Format("Got attachment from {0}, sending . . .", sessionInfo.MailFrom));
+                // Forward the attachemtns to the GGMessaging service
+                ForwardAttachments(sessionInfo.MailFrom.MailAddress, currentStream);
 
-                    bool success = SendAttachment(sessionInfo.MailFrom.MailAddress, attatchment);
+                mLogger.Info(string.Format("Mail received ({0} bytes): {1}", streamLength, sessionInfo.MailFrom));
 
-                    if(!success)
-                    {
-                        mLogger.Error("An error has occoured while sending the message to the server");
-
-                        return SmtpResponses.InternalServerError;
-                    }
-                }
+                // Write a success response to return
+                return SmtpResponses.OK.CloneAndChange(successMessage);
             }
             catch (Exception ex)
             {
@@ -95,21 +95,50 @@ namespace GGSmtp
 
                 return SmtpResponses.InternalServerError;
             }
+            finally
+            {
+                // Dispose the stream and remove the data entry from our dicitionary.
+                // We don't need it after DataEnd() method
+                if(currentStream != null)
+                {
+                    currentStream.Dispose();
+                }
 
-            currentStream.Dispose();
-            mSessionsData.Remove(sessionInfo);
-
-            mLogger.Info(string.Format("Mail received ({0} bytes): {1}", streamLength, sessionInfo.MailFrom));
-
-            return response;
+                mSessionsData.Remove(sessionInfo);
+            }
         }
 
+        #endregion
+
+        #region Private Methods
+
+        private void ForwardAttachments(string mailFrom, Stream messageStream)
+        {
+            try
+            {
+                messageStream.Seek(0, SeekOrigin.Begin);
+
+                // Read the mail message from the stream
+                MimeMessage message = MimeMessage.Load(messageStream);
+
+                foreach (MimePart attatchment in message.Attachments)
+                {
+                    mLogger.Debug(string.Format("Got attachment from {0}, sending . . .", mailFrom));
+
+                    SendAttachment(mailFrom, attatchment);
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
         /// <summary>
         /// Sends an attachment to the GGMessaging server
         /// </summary>
         /// <param name="attatchment">A mail message attachment</param>
-        private bool SendAttachment(string mailFrom, MimePart attatchment)
+        private void SendAttachment(string mailFrom, MimePart attatchment)
         {
             string attachmentFileName = attatchment.FileName;
             GGMessage message = new GGMessage()
@@ -144,10 +173,14 @@ namespace GGSmtp
                 IRestResponse response = client.Execute(request);
 
                 if (response.StatusCode != HttpStatusCode.OK)
-                    return false;
+                {
+                    throw new InvalidOperationException(
+                        string.Format("The response from the server was invalid. Response: {0}, Status Code: {1}",
+                            response.Content, response.StatusCode));
+                }
             }
-
-            return true;
         }
+
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using Simple.MailServer.Logging;
+﻿using GGSmtp.ServerApp.Properties;
+using Simple.MailServer.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,10 @@ namespace GGSmtp.ServerApp
     {
         public static void Main(string[] args)
         {
-            GGSmtpServer server = new GGSmtpServer(28960, MailServerLogLevel.Debug);
+            short port = Settings.Default.Port;
+            MailServerLogLevel verbosity = Settings.Default.LogVerbosity;
+
+            GGSmtpServer server = new GGSmtpServer(port, verbosity);
 
             server.StartServer(false);
 

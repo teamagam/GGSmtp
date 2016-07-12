@@ -12,7 +12,7 @@ namespace GGSmtp.ServerApp
     {
         public static void Main(string[] args)
         {
-            short port = Settings.Default.Port;
+            short port = Settings.Default.HostPort;
             MailServerLogLevel verbosity = Settings.Default.LogVerbosity;
 
             GGSmtpServer server = new GGSmtpServer(port, verbosity);

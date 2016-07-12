@@ -25,10 +25,10 @@ namespace GGSmtp.ServerApp.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("28961")]
-        public short Port {
+        [global::System.Configuration.DefaultSettingValueAttribute("28960")]
+        public short HostPort {
             get {
-                return ((short)(this["Port"]));
+                return ((short)(this["HostPort"]));
             }
         }
         

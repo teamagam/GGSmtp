@@ -14,7 +14,7 @@ namespace GGSmtp.ServerApp
         {
             short port = Settings.Default.HostPort;
             MailServerLogLevel verbosity = Settings.Default.LogVerbosity;
-            MailServerLog4Net logger = new MailServerLog4Net(verbosity);
+            Log4NetMailServerLogger logger = new Log4NetMailServerLogger(verbosity);
 
             GGSmtpServer server = new GGSmtpServer(port, logger);
 

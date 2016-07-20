@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace GGSmtp.ServerApp
 {
-    public class MailServerLog4Net : IMailServerLogger
+    public class Log4NetMailServerLogger : IMailServerLogger
     {
         MailServerLogLevel mLogLevel;
         ILog mLogger;
 
-        public MailServerLog4Net(MailServerLogLevel logLevel)
+        public Log4NetMailServerLogger(MailServerLogLevel logLevel)
         {
             mLogLevel = logLevel;
             mLogger = LogManager.GetLogger("MailServerLogger");
@@ -29,7 +29,7 @@ namespace GGSmtp.ServerApp
 
         public void Debug(string message)
         {
-            if (mLogLevel >= MailServerLogLevel.Debug)
+            if (ShouldLog(MailServerLogLevel.Debug))
             {
                 mLogger.Debug(message);
             }
@@ -37,7 +37,7 @@ namespace GGSmtp.ServerApp
 
         public void Error(Exception ex)
         {
-            if(mLogLevel >= MailServerLogLevel.Error)
+            if(ShouldLog(MailServerLogLevel.Error))
             {
                 mLogger.Error(ex);
             }
@@ -45,7 +45,7 @@ namespace GGSmtp.ServerApp
 
         public void Error(string message)
         {
-            if (mLogLevel >= MailServerLogLevel.Error)
+            if (ShouldLog(MailServerLogLevel.Error))
             {
                 mLogger.Error(message);
             }
@@ -53,7 +53,7 @@ namespace GGSmtp.ServerApp
 
         public void Error(Exception ex, string message)
         {
-            if (mLogLevel >= MailServerLogLevel.Error)
+            if (ShouldLog(MailServerLogLevel.Error))
             {
                 mLogger.Error(message, ex);
             }
@@ -61,7 +61,7 @@ namespace GGSmtp.ServerApp
 
         public void Info(string message)
         {
-            if (mLogLevel >= MailServerLogLevel.Info)
+            if (ShouldLog(MailServerLogLevel.Info))
             {
                 mLogger.Info(message);
             }
@@ -69,10 +69,15 @@ namespace GGSmtp.ServerApp
 
         public void Warn(string message)
         {
-            if (mLogLevel >= MailServerLogLevel.Warn)
+            if (ShouldLog(MailServerLogLevel.Warn))
             {
                 mLogger.Warn(message);
             }
+        }
+
+        private bool ShouldLog(MailServerLogLevel level)
+        {
+            return mLogLevel >= level;
         }
     }
 }

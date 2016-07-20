@@ -2,8 +2,8 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="GGSmtp.ServerApp.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Port" Type="System.Int16" Scope="Application">
-      <Value Profile="(Default)">28961</Value>
+    <Setting Name="HostPort" Type="System.Int16" Scope="Application">
+      <Value Profile="(Default)">28960</Value>
     </Setting>
     <Setting Name="LogVerbosity" Type="Simple.MailServer.Logging.MailServerLogLevel" Scope="Application">
       <Value Profile="(Default)">Debug</Value>

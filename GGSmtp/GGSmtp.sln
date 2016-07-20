@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GGSmtp.ServerApp", "GGSmtp.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GGSmtp.Tests", "GGSmtp.Tests\GGSmtp.Tests.csproj", "{05B0A006-7A4F-469F-85F1-C4B2064AB61A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple.MailServer", "Simple.MailServer\Simple.MailServer.csproj", "{4677857B-02B9-4A32-A8C6-222094672DF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{05B0A006-7A4F-469F-85F1-C4B2064AB61A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05B0A006-7A4F-469F-85F1-C4B2064AB61A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05B0A006-7A4F-469F-85F1-C4B2064AB61A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4677857B-02B9-4A32-A8C6-222094672DF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4677857B-02B9-4A32-A8C6-222094672DF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4677857B-02B9-4A32-A8C6-222094672DF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4677857B-02B9-4A32-A8C6-222094672DF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
